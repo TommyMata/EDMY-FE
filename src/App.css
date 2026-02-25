@@ -1,3 +1,33 @@
+/* About Us Section Styles */
+.about-us-section {
+  background: #f8f9fa;
+  padding: 60px 0 40px 0;
+  margin-top: 0;
+}
+.about-us-content {
+  max-width: 700px;
+  margin: 0 auto;
+  text-align: center;
+}
+.about-us-title {
+  font-size: 2.5em;
+  font-weight: 700;
+  margin-bottom: 24px;
+  color: #2d3a2d;
+  letter-spacing: -1px;
+}
+.about-us-text {
+  font-size: 1.25em;
+  color: #234;
+  margin-bottom: 18px;
+  line-height: 1.7;
+}
+.about-us-subtext {
+  font-size: 1.1em;
+  color: #4a4a4a;
+  margin-top: 10px;
+  font-style: italic;
+}
 .app {
   display: flex;
   flex-direction: column;
@@ -5,69 +35,97 @@
 }
 
 /* Navigation Bar */
-.navbar {
-  background: white;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 100;
-}
 
-.nav-container {
-  max-width: 100%;
-  margin: 0;
-  padding: 0 40px;
+/* Custom Navbar Inspired by Example */
+.navbar-bg {
+  width: 100%;
+  background: transparent;
   display: flex;
   justify-content: center;
-  align-items: center;
-  height: 150px;
-  position: relative;
+  align-items: flex-start;
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  z-index: 20;
+  pointer-events: none;
 }
-
-.nav-brand {
+.custom-navbar {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 24px rgba(0,0,0,0.13);
+  width: 90vw;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0;
+  position: relative;
+  z-index: 30;
+  margin-top: 20px;
+  pointer-events: auto;
+}
+.custom-navbar-content {
   display: flex;
   align-items: center;
-  gap: 15px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  justify-content: space-between;
+  padding: 0 32px;
+  min-height: 72px;
 }
-
-.nav-logo-img {
-  height: 400px;
+.custom-navbar-logo {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  flex: none;
+  margin-right: 32px;
+  height: 100px;
+  width: 400px;
+  min-width: 200px;
+  max-width: 500px;
+}
+.custom-navbar-logo-img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+  object-fit: contain;
   width: auto;
   object-fit: contain;
-  transition: transform 0.3s ease;
-  margin-top: 20px;
+  cursor: pointer;
+  transition: transform 0.2s;
 }
-
-.nav-brand:hover .nav-logo-img {
-  transform: scale(1.05);
+.custom-navbar-logo-img:hover {
+  transform: scale(1.04);
 }
-
-.nav-logo {
-  font-size: 2.8em;
-}
-
-.nav-brand h1 {
-  font-size: 3.2em;
-  color: white;
-  margin: 0;
-  font-weight: 700;
-  letter-spacing: -0.5px;
-  white-space: nowrap;
-}
-
-.nav-links {
+.custom-navbar-menu {
   display: flex;
-  gap: 15px;
   align-items: center;
-  position: absolute;
-  right: 40px;
-  padding: 0;
+  gap: 32px;
+  list-style: none;
   margin: 0;
+  padding: 0;
+  font-size: 1.15em;
+  font-weight: 500;
+}
+.custom-navbar-menu li {
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.custom-navbar-menu li:hover {
+  color: #0386d0;
+}
+.custom-navbar-btn {
+  background: #6c757d;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 28px;
+  font-weight: 700;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  margin-left: 12px;
+}
+.custom-navbar-btn:hover {
+  background: #5a6268;
+  color: #fff;
 }
 
 .nav-btn {
@@ -123,19 +181,23 @@
 }
 
 /* Hero Section */
+
 .hero {
-  background: linear-gradient(135deg, #2d7a4f 0%, #1B4D1B 100%);
+  /* background is now set inline via React for carousel */
   color: white;
-  padding: 80px 20px;
+  padding: 160px 20px 500px 20px;
   text-align: center;
   position: relative;
   overflow: hidden;
-  min-height: 500px;
+  min-height: 1100px;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background-image 0.7s ease-in-out;
 }
 
+
+/* Overlay for hero background images */
 .hero::before {
   content: '';
   position: absolute;
@@ -143,10 +205,8 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 120"><path d="M0,50 Q300,0 600,50 T1200,50 L1200,120 L0,120 Z" fill="%23ffffff" fill-opacity="0.1"/></svg>');
-  background-repeat: repeat-x;
-  background-position: 0 bottom;
-  animation: wave 15s linear infinite;
+  background: rgba(0,0,0,0.38); /* dark overlay for readability */
+  z-index: 1;
 }
 
 @keyframes wave {
@@ -164,6 +224,8 @@
   max-width: 900px;
   margin: 0 auto;
   animation: fadeInDown 0.8s ease-out;
+  color: #fff;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.45), 0 1px 0 #222;
 }
 
 .hero h1 {
@@ -172,13 +234,15 @@
   font-weight: 700;
   letter-spacing: -1px;
   line-height: 1.2;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.45), 0 1px 0 #222;
 }
 
 .hero > div > p {
   font-size: 1.3em;
   margin-bottom: 40px;
-  opacity: 0.95;
+  opacity: 0.98;
   line-height: 1.6;
+  text-shadow: 0 2px 12px rgba(0,0,0,0.45), 0 1px 0 #222;
 }
 
 .hero-search {
@@ -313,10 +377,15 @@
   margin: 0 auto;
   display: flex;
   justify-content: center;
+  gap: 80px;
   margin-bottom: 30px;
 }
 
 .contact-section {
+  text-align: center;
+}
+
+.social-section {
   text-align: center;
 }
 
@@ -354,6 +423,7 @@
   gap: 20px;
   justify-content: center;
   flex-wrap: wrap;
+  align-items: center;
 }
 
 .social-link {

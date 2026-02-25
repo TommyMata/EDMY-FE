@@ -1,18 +1,34 @@
 import { useState, useEffect } from 'react'
 import { FaWhatsapp, FaInstagram, FaYoutube } from 'react-icons/fa'
 import Login from './components/Login'
+import AboutUsModal from './components/AboutUsModal'
 import TourList from './components/TourList'
 import TourForm from './components/TourForm'
 import './App.css'
 
 function App() {
+  // Hero background carousel state
+  const heroImages = [
+    '/start1.jpeg',
+    '/start2.jpeg',
+    '/start3.jpeg',
+  ];
+  const [heroBgIndex, setHeroBgIndex] = useState(0);
+  const [aboutModalOpen, setAboutModalOpen] = useState(false)
+    // Hero background carousel effect
+    useEffect(() => {
+      const interval = setInterval(() => {
+        setHeroBgIndex((prev) => (prev + 1) % heroImages.length);
+      }, 2000);
+      return () => clearInterval(interval);
+    }, []);
   const [user, setUser] = useState(null)
   const [tours, setTours] = useState([])
   const [loading, setLoading] = useState(true)
   const [showForm, setShowForm] = useState(false)
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
-  const toursPerPage = 3
+  const toursPerPage = 4
 
   // Verificar si hay usuario guardado en localStorage
   useEffect(() => {
@@ -27,10 +43,11 @@ function App() {
   }, [])
 
   // Cargar tours cuando el usuario está logueado
+  // MODO INFORMATIVO: Cargamos tours automáticamente sin login
   useEffect(() => {
-    if (user) {
+    // if (user) {
       fetchTours()
-    }
+    // }
   }, [user])
 
   const fetchTours = async () => {
@@ -99,46 +116,57 @@ function App() {
   const paginatedTours = filteredTours.slice(startIndex, endIndex)
 
   // Si no hay usuario, mostrar login
-  if (!user) {
-    return <Login onLoginSuccess={handleLoginSuccess} />
-  }
+  // MODO INFORMATIVO: Login deshabilitado temporalmente
+  // if (!user) {
+  //   return <Login onLoginSuccess={handleLoginSuccess} />
+  // }
 
   // Si hay usuario, mostrar la app
   return (
     <div className="app">
+      <AboutUsModal open={aboutModalOpen} onClose={()=>setAboutModalOpen(false)} />
       {/* Navigation Header */}
-      <nav className="navbar">
-        <div className="nav-container">
-          <div className="nav-brand" onClick={handleLogoClick}>
-            <img src="/logo.png" alt="Agua Blanca Tours" className="nav-logo-img" />
-          </div>
-          <div className="nav-links">
-            <div className="nav-user-info">
-              👤 <span>{user.name}</span>
+      <div className="navbar-bg">
+        <nav className="navbar custom-navbar">
+          <div className="custom-navbar-content">
+            <div className="custom-navbar-logo" onClick={handleLogoClick}>
+              <img src="/logo.png" alt="Agua Blanca Adventures" className="custom-navbar-logo-img" />
             </div>
-            <button 
-              className={`nav-btn ${showForm ? 'active' : ''}`}
-              onClick={() => setShowForm(!showForm)}
-              title="Create new tour"
-            >
-              {showForm ? '← Back' : '+ New Tour'}
-            </button>
-            <button 
-              className="nav-logout-btn"
-              onClick={handleLogout}
-              title="Logout"
-            >
-              Logout
-            </button>
+            <ul className="custom-navbar-menu">
+              <li><a href="#tours-section" style={{textDecoration:'none', color:'inherit'}}>Tours <span style={{fontSize:'1.1em'}}>▼</span></a></li>
+              <li><a href="#contact-us" style={{textDecoration:'none', color:'inherit'}}>Contact Us</a></li>
+              <li><button style={{background:'none',border:'none',padding:0,margin:0,font:'inherit',color:'inherit',cursor:'pointer'}} onClick={()=>setAboutModalOpen(true)}>About Us</button></li>
+              <li>
+                <a 
+                  href="https://wa.me/+50684894857?text=Hello%2C%20I%20would%20like%20to%20book%20a%20tour"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-primary"
+                  style={{textDecoration:'none', display:'inline-flex', alignItems:'center', gap:'5px', justifyContent:'center', marginLeft:'12px', padding:'10px 28px', fontWeight:'700', fontSize:'1em', borderRadius:'8px'}}
+                >
+                  <FaWhatsapp /> Book Now
+                </a>
+              </li>
+            </ul>
           </div>
-        </div>
-      </nav>
+        </nav>
+      </div>
 
       {/* Hero Section */}
-      <header className="hero">
+      <header
+        className="hero"
+        style={{
+          backgroundImage: `url(${heroImages[heroBgIndex]})`,
+          backgroundSize: 'cover',
+          backgroundPosition: 'center',
+          backgroundRepeat: 'no-repeat',
+          transition: 'background-image 0.7s ease-in-out',
+        }}
+      >
         <div className="hero-content">
           <h1>Discover Costa Rica with Us</h1>
           <p>Experience unforgettable adventures in the most beautiful destinations</p>
+          {/* ¡Search oculto temporalmente!
           {!showForm && (
             <div className="hero-search">
               <input 
@@ -150,6 +178,7 @@ function App() {
               />
             </div>
           )}
+          */}
         </div>
       </header>
 
@@ -162,7 +191,7 @@ function App() {
           />
         ) : (
           <>
-            <section className="tours-section">
+            <section className="tours-section" id="tours-section">
               <div className="section-header">
                 <h2>Our Available Tours</h2>
                 <p>{filteredTours.length} incredible destinations await you</p>
@@ -229,7 +258,7 @@ function App() {
       {/* Footer */}
       <footer className="footer">
         <div className="footer-content">
-          <div className="footer-section contact-section">
+          <div className="footer-section contact-section" id="contact-us">
             <h3>Contact Us</h3>
             <div className="social-links">
               <a 
@@ -242,6 +271,11 @@ function App() {
                 <FaWhatsapp />
                 <span>WhatsApp</span>
               </a>
+            </div>
+          </div>
+          <div className="footer-section social-section">
+            <h3>Social Media</h3>
+            <div className="social-links">
               <a 
                 href="https://www.instagram.com/aguablancaadventures/" 
                 target="_blank" 
@@ -252,18 +286,21 @@ function App() {
                 <FaInstagram />
                 <span>Instagram</span>
               </a>
-              <a 
-                href="https://www.youtube.com/@amazingvacationscostarica3868" 
-                target="_blank" 
-                rel="noopener noreferrer"
-                className="social-link youtube"
-                title="Watch our videos on YouTube"
-              >
-                <FaYoutube />
-                <span>YouTube</span>
-              </a>
             </div>
           </div>
+          {/* YouTube link hidden temporarily */}
+          {false && (
+            <a 
+              href="https://www.youtube.com/@amazingvacationscostarica3868" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="social-link youtube"
+              title="Watch our videos on YouTube"
+            >
+              <FaYoutube />
+              <span>YouTube</span>
+            </a>
+          )}
         </div>
         <div className="footer-bottom">
           <p>&copy; 2026 Agua Blanca Tours. All rights reserved.</p>
